@@ -1,19 +1,36 @@
 #GettingAndCleaningData : Project
 #run_analysis.R
-#
+#####################################################################################################
+# Overview
+#####################################################################################################
+#There are 6 main tasks which the script performs :
+#    
+#    1. Download the raw data set
+#    2. Merge the training and test data sets
+#    3. Extract mean and standard deviation mesurement variables
+#    4. Replace activity id's with their associated activity names
+#    5. Label the variables in the data set appropriately
+#    6. Create and output an independent tidy data set with the average of each subject/activity combination
+
 #See README.md for run instructions and script details
 #See Codebook.md for data description
 
+#####################################################################################################
 #Load Required Packages
+#####################################################################################################
 library(dplyr)
 
-#Included functions declarations
+#####################################################################################################
+# Declare Functions
+#####################################################################################################
 #Function downloadFile
 downloadFile <- function(url,dest.file,method) {
     download.file(url,dest.file,method)
 }
 
-#create data directory if it doesn't exist
+#####################################################################################################
+# Create data folder if it doesn't exist
+#####################################################################################################
 if(!file.exists("data")) {
     dir.create("data")
 }
@@ -87,7 +104,7 @@ x.test <- read.table(file.path(data.path,"test","X_test.txt"),col.names = featur
 y.test <- read.table(file.path(data.path,"test","y_test.txt"),col.names = c("activity"))
 
 ####################################################################################################
-# Read the subject data
+# Read the test subject data
 ####################################################################################################
 #Subject references are contained in the file 'subject_test.txt'
 #read 'subject_test.txt' and label the column as 'subject'
@@ -129,12 +146,16 @@ combined.data <- rbind(test.data,train.data)
 # Extract mean and standard deviation measurements
 ######################################################################################################
 #Construct a regular expression which matches only the std and mean variables
-#Extract from the combined data only those variables which have '.std.' or '.mean.' in the name
-#pattern will match features with '.std.' and '.mean.'
-pattern <- "\\.(std|mean)\\."
+#Extract from the combined data only those variables which have 'std' or 'mean' in the name
+#pattern.mean.std will match features with 'std' and 'mean'
+#pattern.mean.freq will match features with 'meanFreq'
+pattern.mean.std <- "(std|mean)"
+pattern.mean.freq <- "(\\.meanFreq)"
 
 #create data frame with only the selected features
-selected.features <- select(combined.data,subject,activity,grep(pattern,names(combined.data)))
+#include names matched with pattern.mean.std and exclude names matched with pattern.mean.freq
+selected.features <- select(combined.data,subject,activity,grep(pattern.mean.std,names(combined.data)),
+                            -grep(pattern.mean.freq,names(combined.data)))
 
 #sort selected.features by subject and activity
 selected.features <- arrange(selected.features,subject,activity)
