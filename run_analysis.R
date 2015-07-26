@@ -182,7 +182,7 @@ selected.features$activity <- factor(selected.features$activity,
 #create the tidy data set by first aggregating the mean of all variables except subject and activity,
 #then arranging by subject and activity
 subject.activity.means <- arrange(
-    aggregate(selected.features[,3:50],
+    aggregate(selected.features[,3:68],
                     list(subject = selected.features$subject,
                     activity = selected.features$activity),mean),
         subject,activity)
