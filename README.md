@@ -98,7 +98,7 @@ Full details of the script operations can be found in the script comments.
 ### Tidy Data
 For this project, a wide-format tidy data set was selected.
 
-The first 2 columns contain id values, the remainder contain a single measurement of each variable.
+The first 2 columns contain id values, the remainder contain the average of each selected measurement variable.
 Each row in the data set contains a single observation of subject and activity.
 
 This satisfies the requirements of the assignment and also satisfies the definition of tidy data as 
